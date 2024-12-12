@@ -1,0 +1,32 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+    workflow_dispatch:
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Get current date
+          id: date
+          run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+        - name: Build Android bundle
+          uses: AcmeSoftwareLLC/flutter-build@v1
+          with:
+              platform: android
+              build-name: 1.0.0
+              build-number: ${{ steps.date.outputs.date }}
+              pub-get: true
+              gen-icons: false
+
+        - name: Clone Repo
+          uses: actions/checkout@v4
+
+        - name: Firebase App Distribution
+          uses: hasretsariyer/firebase-app-distribution-github-action@v1
+          with:
+              app_id: ${{ secrets.FIREBASE_APP_ID }}
+              firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+              app_file: app-release.apk
+              tester_groups: maintainers
