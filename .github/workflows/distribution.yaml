@@ -16,17 +16,12 @@ jobs:
           uses: mobiledevops/flutter-sdk-action@v1.0.0
           with:
             flutter-sdk-version: 3.24.3
-        - run: cd flutter_application
-        - run: flutter --version
-        - run: flutter doctor
-        - run: flutter pub get
-        - run: flutter test
-        - run: flutter build android --release
+        - run: cd flutter_application && flutter pub get && flutter build android --release
 
         - name: Firebase App Distribution
           uses: hasretsariyer/firebase-app-distribution-github-action@main
           with:
               app_id: ${{ secrets.FIREBASE_APP_ID }}
               firebase_token: ${{ secrets.FIREBASE_TOKEN }}
-              app_file: app-release.apk
+              app_file: flutter_application/build/outputs/flutter-apk/app-release.apk
               tester_groups: maintainers
