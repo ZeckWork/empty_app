@@ -27,5 +27,5 @@ jobs:
           with:
               app_id: ${{ secrets.FIREBASE_APP_ID }}
               firebase_token: ${{ secrets.FIREBASE_TOKEN }}
-              app_file: flutter_application/build/outputs/flutter-apk/app-release.apk
+              app_file: flutter_application/build/app/outputs/flutter-apk/app-release.apk
               tester_groups: maintainers
