@@ -23,7 +23,7 @@ jobs:
         - run: cd flutter_application && flutter pub get && flutter build apk --release
 
         - name: Firebase App Distribution
-          uses: hasretsariyer/firebase-app-distribution-github-action@main
+          uses: alex-dybsetter/firebase-app-distribution-github-action@main
           with:
               app_id: ${{ secrets.FIREBASE_APP_ID }}
               firebase_token: ${{ secrets.FIREBASE_TOKEN }}
