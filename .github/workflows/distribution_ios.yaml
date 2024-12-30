@@ -40,8 +40,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python3 -m pip install --upgrade pip
-          python3 -m pip install pyjwt
+          pip install -r requirements.txt
   
       - name: Generate JWT Token
         id: generate_token
