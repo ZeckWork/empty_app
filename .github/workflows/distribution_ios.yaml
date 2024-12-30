@@ -67,8 +67,8 @@ jobs:
 
           echo ${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }} | base64 --decode > signingCertificate.p12
           security create-keychain -p "" build.keychain
-          security import signingCertificate.p12 -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          security import signingCertificate.p12 -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
           rm signingCertificate.p12
 
       - name: Install Flutter SDK
