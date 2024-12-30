@@ -1,4 +1,4 @@
-import jwt
+from jwt import encode
 import time
 
 def generate_token(key_file_path, team_id, key_id):
@@ -16,7 +16,7 @@ def generate_token(key_file_path, team_id, key_id):
         "kid": key_id
     }
 
-    token = jwt.encode(payload, private_key, algorithm="ES256", headers=headers)
+    token = encode(payload, private_key, algorithm="ES256", headers=headers)
     return token
 
 
