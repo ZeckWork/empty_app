@@ -1,28 +1,27 @@
-from jwt import encode
 import time
 import os
+import jwt
 
 def generate_token(key_file_path, team_id, key_id):
-    # Abra o arquivo .p8 em modo binário ('rb') para garantir que a chave seja lida como bytes
     with open(key_file_path, "rb") as key_file:
         private_key = key_file.read()
 
-    # Crie o payload
     payload = {
         "iss": team_id,
         "iat": int(time.time()),
-        "exp": int(time.time()) + 20 * 60,  # Expira em 20 minutos
+        "exp": int(time.time()) + 20 * 60,
         "aud": "appstoreconnect-v1"
     }
 
-    # Configure os cabeçalhos
     headers = {
         "kid": key_id
     }
 
-    # Gere o token
-    token = encode(payload, private_key, algorithm="ES256", headers=headers)
-    return token
+    try:
+        token = jwt.encode(payload=payload, key=private_key, algorithm="ES256", headers=headers)
+        return token
+    except Exception as e:
+        print(f'erro: {e}')
 
 
 if __name__ == "__main__":
