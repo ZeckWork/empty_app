@@ -59,12 +59,6 @@ jobs:
           echo API_KEY=${{ secrets.API_KEY }} >> application.config
           cat application.config
 
-      - name: Install Flutter SDK
-        uses: mobiledevops/flutter-sdk-action@v1.0.0
-        with:
-          flutter-sdk-version: 3.24.3
-      - run: cd flutter_application && flutter pub get && flutter build ios --release --no-codesign
-
       - name: Set up certificate and provisioning profile
         run: |
           # Criar o diretório para os perfis de provisão
@@ -77,6 +71,12 @@ jobs:
           security create-keychain -p "" build.keychain
           security import <(echo "${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }}" | base64 --decode) -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+
+      - name: Install Flutter SDK
+        uses: mobiledevops/flutter-sdk-action@v1.0.0
+        with:
+          flutter-sdk-version: 3.24.3
+      - run: cd flutter_application && flutter pub get && flutter build ios --release --no-codesign
 
       - name: Export Signed IPA
         run: |
