@@ -61,16 +61,15 @@ jobs:
 
       - name: Set up certificate and provisioning profile
         run: |
-          # Criar o diretório para os perfis de provisão
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          
-          # Adicionar o perfil de provisão
+
           echo "${{ secrets.PROVISIONING_PROFILE_DISTRIBUTION }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
-          
-          # Criar um keychain temporário e importar o certificado
+
+          echo ${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }} | base64 --decode > signingCertificate.p12
           security create-keychain -p "" build.keychain
-          security import <(echo "${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }}" | base64 --decode) -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
+          security import signingCertificate.p12 -k ~/Library/Keychains/build.keychain -T /usr/bin/codesign
           security unlock-keychain -p "" ~/Library/Keychains/build.keychain
+          rm signingCertificate.p12
 
       - name: Install Flutter SDK
         uses: mobiledevops/flutter-sdk-action@v1.0.0
