@@ -1,4 +1,4 @@
-from jwt import encode
+from jwt.api_jws import encode
 import time
 
 def generate_token(key_file_path, team_id, key_id):
