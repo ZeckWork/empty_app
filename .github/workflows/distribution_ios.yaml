@@ -55,7 +55,7 @@ jobs:
         run: |
           touch flutter_application/assets/config/application.config
           cd flutter_application/assets/config/
-          echo API_ENDPOINT="${{ secrets.ENDPOINT }}" >> application.config
+          echo API_ENDPOINT="${{ secrets.API_ENDPOINT }}" >> application.config
           echo API_KEY=${{ secrets.API_KEY }} >> application.config
           cat application.config
 
