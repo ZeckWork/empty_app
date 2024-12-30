@@ -29,6 +29,21 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Set up .p8 file
+        run: |
+          echo "${{ secrets.PRIVATE_KEY }}" | base64 --decode > AuthKey.p8
+
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pyjwt
+  
+      - name: Generate JWT Token
+        id: generate_token
+        run: |
+          python3 generate_token.py > token.txt
+          echo "jwt_token=$(cat token.txt)" >> $GITHUB_ENV
+
       - name: 'Create application.config file'
         run: |
           touch flutter_application/assets/config/application.config
@@ -66,13 +81,13 @@ jobs:
 
       - name: Upload to TestFlight
         env:
-          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.API_KEY }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.KEY_ID }}
         run: |
           cd flutter_application
 
           xcrun altool --upload-app -f build/Runner.ipa \
           --type ios \
-          --apiKey $APP_STORE_CONNECT_KEY_ID \
-          --apiIssuer $APP_STORE_CONNECT_ISSUER_ID
+          --apiKey ${{ secrets.KEY_ID }} \
+          --apiIssuer ${{ secrets.ISSUER_ID }}
