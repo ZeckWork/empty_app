@@ -22,9 +22,9 @@ jobs:
         id: build_number
         run: echo "build_number=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4.6.0
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -32,6 +32,11 @@ jobs:
       - name: Set up .p8 file
         run: |
           echo "${{ secrets.PRIVATE_KEY }}" | base64 --decode > AuthKey.p8
+
+      - name: Set up Python
+        uses: actions/setup-python@v5.3.0
+        with:
+          python-version: '3.12.3'
 
       - name: Install Dependencies
         run: |
