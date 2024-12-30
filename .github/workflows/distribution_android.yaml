@@ -12,10 +12,20 @@ jobs:
           run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
         - uses: actions/checkout@v4
+
         - uses: actions/setup-java@v4
           with:
             distribution: 'temurin'
             java-version: '17'
+
+        - name: 'Create application.config file'
+          run: |
+            touch flutter_application/assets/config/application.config
+            cd flutter_application/assets/config/
+            echo API_ENDPOINT="${{ secrets.ENDPOINT }}" >> application.config
+            echo API_KEY=${{ secrets.API_KEY }} >> application.config
+            cat application.config
+
         - name: Install Flutter SDK
           uses: mobiledevops/flutter-sdk-action@v1.0.0
           with:

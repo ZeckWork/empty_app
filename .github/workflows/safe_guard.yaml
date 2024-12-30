@@ -1,0 +1,14 @@
+name: Safe Guard
+on:
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    pull_request_validations:
+        name: Pull Request Validations
+        runs-on: ubuntu-latest
+        steps:
+            - name: Validate PR title
+            - run:
+                echo 'oi'

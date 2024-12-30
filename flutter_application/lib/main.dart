@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: "assets/config/application.config");
+
   runApp(const MyApp());
 }
 
@@ -105,6 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              'Env map: ${dotenv.env.toString()}',
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
