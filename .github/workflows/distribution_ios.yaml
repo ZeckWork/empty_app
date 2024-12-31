@@ -11,6 +11,12 @@ on:
         options:
           - release
           - beta
+      app:
+        description: "Select app to distribute"
+        required: true
+        type: choice
+        options:
+          - todo_list
 
 jobs:
   Build-And-Distribute-iOS:
@@ -41,6 +47,14 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+
+      - name: 'Create application.config file'
+        run: |
+          cd apps/${{ github.event.inputs.app }}/assets/config/
+          rm -rf application.config
+          echo API_ENDPOINT="${{ secrets.API_ENDPOINT }}" >> application.config
+          echo API_KEY=${{ secrets.API_KEY }} >> application.config
+          cat application.config
   
       - name: Generate JWT Token
         id: generate_token
@@ -50,14 +64,6 @@ jobs:
         run: |
           python3 generate_token.py > token.txt
           echo "jwt_token=$(cat token.txt)" >> $GITHUB_ENV
-
-      - name: 'Create application.config file'
-        run: |
-          touch flutter_application/assets/config/application.config
-          cd flutter_application/assets/config/
-          echo API_ENDPOINT="${{ secrets.API_ENDPOINT }}" >> application.config
-          echo API_KEY=${{ secrets.API_KEY }} >> application.config
-          cat application.config
 
       - name: Set up certificate and provisioning profile
         run: |
@@ -78,43 +84,43 @@ jobs:
         uses: mobiledevops/flutter-sdk-action@v1.0.0
         with:
           flutter-sdk-version: 3.24.3
-      - run: cd flutter_application && flutter pub get && flutter build ios --no-codesign --release
+      - run: cd apps/${{ github.event.inputs.app }} && flutter pub get && flutter build ios --no-codesign --release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           path: flutter_application/build/Runner.ipa
 
-      # - name: Export Signed IPA
-      #   run: |
-      #     cd flutter_application
+      - name: Export Signed IPA
+        run: |
+          cd apps/${{ github.event.inputs.app }}
 
-      #     xcodebuild \
-      #     -workspace ios/Runner.xcworkspace \
-      #     -scheme Runner \
-      #     -sdk iphoneos \
-      #     -configuration AppStoreDistribution archive \
-      #     -archivePath build/Runner.xcarchive \
-      #     clean archive \
-      #     -allowProvisioningUpdates \
-      #     MARKETING_VERSION=1.0.0 \
-      #     CURRENT_PROJECT_VERSION=${{ steps.set_date.outputs.build_number }}
+          xcodebuild \
+          -workspace ios/Runner.xcworkspace \
+          -scheme Runner \
+          -sdk iphoneos \
+          -configuration AppStoreDistribution archive \
+          -archivePath build/Runner.xcarchive \
+          clean archive \
+          -allowProvisioningUpdates \
+          MARKETING_VERSION=1.0.0 \
+          CURRENT_PROJECT_VERSION=${{ steps.build_number.outputs.build_number }}
 
-      #     xcodebuild \
-      #     -exportArchive \
-      #     -archivePath build/Runner.xcarchive \
-      #     -exportOptionsPlist ios/exportOptions.plist \
-      #     -exportPath build/Runner.ipa
+          xcodebuild \
+          -exportArchive \
+          -archivePath build/Runner.xcarchive \
+          -exportOptionsPlist ios/exportOptions.plist \
+          -exportPath build/Runner.ipa
 
-      # - name: Upload to TestFlight
-      #   env:
-      #     APP_STORE_CONNECT_API_KEY: ${{ secrets.API_KEY }}
-      #     APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ISSUER_ID }}
-      #     APP_STORE_CONNECT_KEY_ID: ${{ secrets.KEY_ID }}
-      #   run: |
-      #     cd flutter_application
+      - name: Upload to TestFlight
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.API_KEY }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.KEY_ID }}
+        run: |
+          cd flutter_application
 
-      #     xcrun altool --upload-app -f build/Runner.ipa \
-      #     --type ios \
-      #     --apiKey ${{ secrets.KEY_ID }} \
-      #     --apiIssuer ${{ secrets.ISSUER_ID }}
+          xcrun altool --upload-app -f build/Runner.ipa \
+          --type ios \
+          --apiKey ${{ secrets.KEY_ID }} \
+          --apiIssuer ${{ secrets.ISSUER_ID }}
