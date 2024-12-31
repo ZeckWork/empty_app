@@ -84,7 +84,7 @@ jobs:
         uses: mobiledevops/flutter-sdk-action@v1.0.0
         with:
           flutter-sdk-version: 3.24.3
-      - run: cd apps/${{ github.event.inputs.app }} && flutter pub get && flutter build ios --no-codesign --release
+      - run: cd apps/${{ github.event.inputs.app }} && flutter pub get && flutter build ios --release
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
