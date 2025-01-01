@@ -67,12 +67,13 @@ jobs:
 
       - name: Set up certificate and provisioning profile
         run: |
+          security delete-keychain "${{ secrets.KEYCHAIN }}"
+
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
           echo ${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }} | base64 --decode > signingCertificate.p12
           echo "${{ secrets.PROVISIONING_PROFILE_DISTRIBUTION }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/distribution.mobileprovision
 
-          security list-keychains -d user -s login.keychain
           security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" "${{ secrets.KEYCHAIN }}"
           security list-keychains -d user -s "${{ secrets.KEYCHAIN }}" $(security list-keychains -d user | sed s/\"//g)
           security set-keychain-settings "${{ secrets.KEYCHAIN }}"
@@ -84,7 +85,7 @@ jobs:
         uses: mobiledevops/flutter-sdk-action@v1.0.0
         with:
           flutter-sdk-version: 3.24.3
-      - run: cd apps/${{ github.event.inputs.app }} && flutter pub get && flutter build ios --release
+      - run: cd apps/${{ github.event.inputs.app }} && flutter pub get && flutter build ipa --release --export-options-plist ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

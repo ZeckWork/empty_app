@@ -15,11 +15,11 @@
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>signingCertificate</key>
-	<string>Ezequiel de Oliveira Lima</string>
+	<string>iOS Distribution</string>
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>work.zeck.TodoList</key>
-		<string>iOS Distribution: TodoList (Flutter)</string>
+		<string>046775c8-dc30-4f9c-b06c-2f1b505bed38</string>
 	</dict>
 </dict>
 </plist>
