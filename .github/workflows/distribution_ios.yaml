@@ -86,10 +86,10 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:, -s -k ${{ secrets.KEYCHAIN_PASSWORD }} -D "Apple Worldwide Developer Relations Certification Authority" -t private ${{ secrets.KEYCHAIN }}
 
       - name: Install Flutter SDK
-        uses: mobiledevops/flutter-sdk-action@v1.0.0
-        with:
-          flutter-sdk-version: 3.24.3
-      - run: |
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.24.0 "$HOME/.flutter"
+          echo "$HOME/.flutter/bin" >> $GITHUB_PATH
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
           cd apps/${{ github.event.inputs.app }}
           flutter clean
           flutter pub get
