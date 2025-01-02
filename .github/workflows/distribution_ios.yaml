@@ -93,15 +93,12 @@ jobs:
           cd apps/${{ github.event.inputs.app }}
           flutter clean
           flutter pub get
-          cd ios
-          pod install
-          cd ..
           flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: flutter_application/build/Runner.ipa
+          path: apps/${{ github.event.inputs.app }}/build/Runner.ipa
 
       - name: Export Signed IPA
         run: |
@@ -130,7 +127,7 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ISSUER_ID }}
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.KEY_ID }}
         run: |
-          cd flutter_application
+          cd apps/${{ github.event.inputs.app }}
 
           xcrun altool --upload-app -f build/Runner.ipa \
           --type ios \
