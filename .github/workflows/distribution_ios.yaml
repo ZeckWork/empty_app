@@ -86,13 +86,15 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:, -s -k ${{ secrets.KEYCHAIN_PASSWORD }} -D "Apple Worldwide Developer Relations Certification Authority" -t private ${{ secrets.KEYCHAIN }}
 
       - name: Install Flutter SDK
-        run: |
-          git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.24.0 ".flutter"
-          cat $GITHUB_PATH
+        uses: subosito/flutter-action@v2.18.0
+        with:
+          channel: stable
+          flutter-version: 3.24.3
+      - run: |
           cd apps/${{ github.event.inputs.app }}
-          .flutter/bin/flutter clean
-          .flutter/bin/flutter pub get
-          .flutter/bin/flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info --verbose
+          flutter clean
+          flutter pub get
+          flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info --verbose
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
