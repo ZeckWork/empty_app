@@ -21,5 +21,7 @@
       <key>work.zeck.TodoList</key>
       <string>046775c8-dc30-4f9c-b06c-2f1b505bed38</string>
     </dict>
+    <key>destination</key>
+    <string>export</string>
   </dict>
 </plist>

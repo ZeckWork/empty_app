@@ -94,6 +94,7 @@ jobs:
           cd apps/${{ github.event.inputs.app }}
           flutter clean
           flutter pub get
+          pod install
           flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info
 
       - name: Upload artifact
