@@ -1,0 +1,42 @@
+name: Runner
+options:
+  xcodeVersion: '15.2.0'
+  developmentLanguage: ja
+  deploymentTarget:
+    iOS: 12.0
+  bundleIdPrefix: work.zeck
+targets:
+  Runner:
+    configFiles:
+      Debug: Flutter/Debug.xcconfig
+      Release: Flutter/Release.xcconfig
+    settings:
+      base:
+        CODE_SIGN_STYLE: Manual
+        DEVELOPMENT_TEAM: 297D5XWLQT
+        PRODUCT_BUNDLE_IDENTIFIER: work.zeck.todoList
+        SWIFT_OBJC_BRIDGING_HEADER:
+          - Runner/Runner-Bridging-Header.h
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: iPhone Developer
+          PROVISIONING_PROFILE_SPECIFIER: "iOS Development: TodoList (Flutter)"
+        Release:
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          PROVISIONING_PROFILE_SPECIFIER: "iOS Distribution: TodoList (Flutter)"
+    preBuildScripts:
+      - path: phase_scripts/run_scripts.sh
+        name: Run Script
+    postBuildScripts:
+      - path: phase_scripts/thin_binary.sh
+        name: Thin Binary
+    attributes:
+      DevelopmentTeam: 297D5XWLQT
+    platform: iOS
+    type: application
+    sources: 
+        - Runner/
+        - Flutter/AppFrameworkInfo.plist
+        - Flutter/Generated.xcconfig
+        - Flutter/Debug.xcconfig
+        - Flutter/Release.xcconfig
