@@ -90,9 +90,9 @@ jobs:
           git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.24.0 ".flutter"
           cat $GITHUB_PATH
           cd apps/${{ github.event.inputs.app }}
-          ./.flutter/bin/flutter clean
-          ./.flutter/bin/flutter pub get
-          ./.flutter/bin/flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info --verbose
+          .flutter/bin/flutter clean
+          .flutter/bin/flutter pub get
+          .flutter/bin/flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info --verbose
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
