@@ -73,8 +73,6 @@ jobs:
 
       - name: Set up certificate and provisioning profile
         run: |
-          security delete-keychain "${{ secrets.KEYCHAIN }}"
-
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
 
           echo ${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }} | base64 --decode > signingCertificate.p12
