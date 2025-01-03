@@ -13,7 +13,7 @@ with open('AuthKey.p8', 'rb') as key_file:
 
 keychain = Keychain(Path("/tmp/new.keychain"))
 
-keychain.delete()
+# keychain.delete()
 keychain.initialize()
 
 # keychain.create(password=keychain_password)
