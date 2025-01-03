@@ -93,33 +93,33 @@ jobs:
           cd apps/${{ github.event.inputs.app }}
           flutter clean
           flutter pub get
-          flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info
+          flutter build ipa --release --export-options-plist ios/ExportOptions.plist --build-number=${{ steps.build_number.outputs.build_number }} --split-debug-info=build/ios/debug-info --no-codesign
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           path: apps/${{ github.event.inputs.app }}/build/Runner.ipa
 
-      # - name: Export Signed IPA
-      #   run: |
-      #     cd apps/${{ github.event.inputs.app }}
+      - name: Export Signed IPA
+        run: |
+          cd apps/${{ github.event.inputs.app }}
 
-      #     xcodebuild \
-      #     -workspace ios/Runner.xcworkspace \
-      #     -scheme Runner \
-      #     -sdk iphoneos \
-      #     -configuration AppStoreDistribution archive \
-      #     -archivePath build/Runner.xcarchive \
-      #     clean archive \
-      #     -allowProvisioningUpdates \
-      #     MARKETING_VERSION=1.0.0 \
-      #     CURRENT_PROJECT_VERSION=${{ steps.build_number.outputs.build_number }}
+          xcodebuild \
+          -workspace ios/Runner.xcworkspace \
+          -scheme Runner \
+          -sdk iphoneos \
+          -configuration AppStoreDistribution archive \
+          -archivePath build/Runner.xcarchive \
+          clean archive \
+          -allowProvisioningUpdates \
+          MARKETING_VERSION=1.0.0 \
+          CURRENT_PROJECT_VERSION=${{ steps.build_number.outputs.build_number }}
 
-      #     xcodebuild \
-      #     -exportArchive \
-      #     -archivePath build/Runner.xcarchive \
-      #     -exportOptionsPlist ios/exportOptions.plist \
-      #     -exportPath build/Runner.ipa
+          xcodebuild \
+          -exportArchive \
+          -archivePath build/Runner.xcarchive \
+          -exportOptionsPlist ios/exportOptions.plist \
+          -exportPath build/Runner.ipa
 
       - name: Upload to TestFlight
         env:
