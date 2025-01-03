@@ -1,4 +1,6 @@
+certifi==2024.12.14
 cffi==1.17.1
+codemagic-cli-tools==0.55.0
 cryptography==44.0.0
 pycparser==2.22
 PyJWT==2.10.0

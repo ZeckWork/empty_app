@@ -25,7 +25,7 @@ def generate_token(key_file_path, team_id, key_id):
 
 
 if __name__ == "__main__":
-    key_file_path = "AuthKey.p8"
+    key_file_path = "AuthKey_W3C39K74H2.p8"
     team_id = os.environ["ISSUER_ID"]
     key_id = os.environ["KEY_ID"]
 

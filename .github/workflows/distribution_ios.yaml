@@ -62,14 +62,13 @@ jobs:
       #     cd apps/${{ github.event.inputs.app }}/ios
       #     xcodegen
   
-      # - name: Generate JWT Token
-      #   id: generate_token
-      #   env:
-      #     ISSUER_ID: ${{ secrets.ISSUER_ID }}
-      #     KEY_ID: ${{ secrets.KEY_ID }}
-      #   run: |
-      #     python3 generate_token.py > token.txt
-      #     echo "jwt_token=$(cat token.txt)" >> $GITHUB_ENV
+      - name: Get certificates
+        id: generate_token
+        env:
+          ISSUER_ID: ${{ secrets.ISSUER_ID }}
+          KEY_ID: ${{ secrets.KEY_ID }}
+        run: |
+          python3 xdistribution.py
 
       # - name: Set up certificate and provisioning profile
       #   run: |
