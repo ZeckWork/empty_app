@@ -59,12 +59,10 @@ jobs:
 
       - name: Set up .p8 file
         run: |
-          cd apps/${{ github.event.inputs.app }}/ios
           echo "${{ secrets.PRIVATE_KEY }}" | base64 --decode > AuthKey.p8
 
       - name: Set up certificate file
         run: |
-          cd apps/${{ github.event.inputs.app }}/ios
           echo "${{ secrets.CERTIFICATE_DISTRIBUTION_P12 }}" | base64 --decode > cert.p12
 
       - name: Initialize KeyChain
@@ -77,10 +75,10 @@ jobs:
           app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) \
           --platform IOS \
           --type IOS_APP_STORE \
-          --certificate-key=@file:cert.p12 \
+          --certificate-key @file:../../../cert.p12 \
           --issuer-id ${{ secrets.ISSUER_ID }} \
           --key-id ${{ secrets.KEY_ID }} \
-          --private-key=@file:AuthKey.p8 \
+          --private-key @file:../../../AuthKey.p8 \
           --certificate-key-password ${{ secrets.CERT_PASSWORD }}
 
       - name: Add certificates
