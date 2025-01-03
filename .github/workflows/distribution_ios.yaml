@@ -75,10 +75,10 @@ jobs:
           app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) \
           --platform IOS \
           --type IOS_APP_STORE \
-          --certificate-key=@file:cert.p12 \
+          --certificate-key=@file:../../../cert.p12 \
           --issuer-id ${{ secrets.ISSUER_ID }} \
           --key-id ${{ secrets.KEY_ID }} \
-          --private-key $("${{ secrets.PRIVATE_KEY }}" | base64 --decode) \
+          --private-key=@file:../../../AuthKey.p8 \
           --certificate-key-password ${{ secrets.CERT_PASSWORD }}
 
       - name: Add certificates
