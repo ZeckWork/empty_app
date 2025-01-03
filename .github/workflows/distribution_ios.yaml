@@ -76,7 +76,10 @@ jobs:
           --platform IOS \
           --type IOS_APP_STORE \
           --certificate-key=@file:cert.p12 \
-          --create
+          --issuer-id ${{ secrets.ISSUER_ID }} \
+          --key-id ${{ secrets.KEY_ID }} \
+          --private-key $("${{ secrets.PRIVATE_KEY }}" | base64 --decode) \
+          --certificate-key-password ${{ secrets.CERT_PASSWORD }}
 
       - name: Add certificates
         run: |
